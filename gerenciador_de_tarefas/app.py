@@ -101,7 +101,7 @@ def editar_tarefa(tarefa_id):
 @app.route('/excluir_tarefa/<int:tarefa_id>')
 @login_required
 def excluir_tarefa(tarefa_id):
-    tarefa = Tarefa.query.get_or_404(tarefa_id)
+    tarefa = db.get_or_404(Tarefa, tarefa_id)
     if current_user.id != tarefa.criador_id and current_user.id != tarefa.responsavel_id:
         flash('Você não tem permissão para excluir esta tarefa.', 'danger')
         return redirect(url_for('index'))
