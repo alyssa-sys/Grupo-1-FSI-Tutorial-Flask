@@ -9,6 +9,7 @@ class Usuario(db.Model, UserMixin):
     nome = db.Column(db.String(100), nullable=False, default=nomeUsuario) #teste se é possível atribuir a si mesmo
     tarefasCriadas = db.relationship('Tarefa', backref='criador', foreign_keys='Tarefa.criador_id', lazy=True)
     tarefasAtribuidas = db.relationship('Tarefa', backref='responsavel', foreign_keys='Tarefa.responsavel_id', lazy=True)
+    cargo = db.Column(db.String(100), nullable=True, default='Usuario')  #Admin ou usuario normal
 
 class Tarefa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
