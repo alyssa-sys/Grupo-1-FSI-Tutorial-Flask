@@ -112,3 +112,14 @@ def excluir_tarefa(tarefa_id):
     flash('Tarefa excluída com sucesso!', 'success')
     return redirect(url_for('index'))
 
+# ===== ROTAS PROVISORIAS: quem for fazer a rota real deve SUBSTITUIR estas =====
+@app.route('/quadro')
+@login_required
+def quadro():
+    return 'Quadro de tarefas (em construção)'
+
+@app.route('/logout')
+@login_required
+def logout():
+    return 'Logout (em construção)'
+# ===== fim das rotas provisorias =====
