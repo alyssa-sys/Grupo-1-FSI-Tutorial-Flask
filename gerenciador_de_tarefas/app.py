@@ -46,6 +46,22 @@ def registro():
 
     return render_template('registro.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+
+        usuario = Usuario.query.filter_by(email=email).first()
+        if usuario and check_password_hash(usuario.senha, senha):
+            login_user(usuario)
+            flash('Login realizado com sucesso!', 'success')
+            return redirect(url_for('admin_dashboard') if usuario.cargo == 'admin' else url_for('quadro'))
+        else:
+            flash('Email ou senha incorretos.', 'danger')
+
+    return render_template('login.html')
+
 #admin
 @app.route('/admin')
 @login_required
