@@ -34,7 +34,7 @@ def registro():
 
         usuario = Usuario.query.filter((Usuario.email == email) | (Usuario.nomeUsuario == nomeUsuario)).first()
         if usuario:
-            flash('Email já cadastrado.', 'danger')
+            flash('Já existe um usuário com esse email ou nome de usuário.', 'danger')
             return redirect(url_for('registro'))
 
         novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha)
@@ -51,11 +51,11 @@ def registro():
 @login_required
 def admin_dashboard():
     if current_user.cargo != 'admin':
-        flash("Access denied", 'danger')
+        flash("Acesso negado!", 'danger')
         return redirect(url_for('quadro'))
 
     tarefas = Tarefa.query.all()
-    return render_template('admin_dashboard.html', tarefas = tarefas)
+    return render_template('quadro_admin.html', tarefas = tarefas)
     
 #adicionar tarefa
 @app.route('/adicionar_tarefa', methods=['GET', 'POST'])
