@@ -72,7 +72,15 @@ def admin_dashboard():
 
     tarefas = Tarefa.query.all()
     return render_template('quadro_admin.html', tarefas = tarefas)
-    
+
+# * Dashboard route
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
+    tarefas_compartilhadas = Tarefa.query.filter_by(responsavel_id=current_user.id).all()
+    return render_template('dashboard.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
+
 #adicionar tarefa
 @app.route('/adicionar_tarefa', methods=['GET', 'POST'])
 @login_required
