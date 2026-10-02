@@ -12,7 +12,7 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login' # type: ignore
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -37,7 +37,7 @@ def registro():
             flash('Já existe um usuário com esse email ou nome de usuário.', 'danger')
             return redirect(url_for('registro'))
 
-        novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha)
+        novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha) # type: ignore
         db.session.add(novo_usuario)
         db.session.commit()
 
@@ -73,14 +73,6 @@ def admin_dashboard():
     tarefas = Tarefa.query.all()
     return render_template('quadro_admin.html', tarefas = tarefas)
 
-# * Dashboard route
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
-    tarefas_compartilhadas = Tarefa.query.filter_by(responsavel_id=current_user.id).all()
-    return render_template('dashboard.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
-
 #adicionar tarefa
 @app.route('/adicionar_tarefa', methods=['GET', 'POST'])
 @login_required
@@ -91,7 +83,7 @@ def adicionar_tarefa():
         status = request.form['status']
         responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
 
-        nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id)
+        nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id) # type: ignore
 
         db.session.add(nova_tarefa)
         db.session.commit()
@@ -136,11 +128,15 @@ def excluir_tarefa(tarefa_id):
     flash('Tarefa excluída com sucesso!', 'success')
     return redirect(url_for('index'))
 
-# ===== ROTAS PROVISORIAS: quem for fazer a rota real deve SUBSTITUIR estas =====
+# * rota do quadro (Dashboard)
 @app.route('/quadro')
 @login_required
 def quadro():
-    return 'Quadro de tarefas (em construção)'
+    minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
+    tarefas_compartilhadas = Tarefa.query.filter_by(responsavel_id=current_user.id).all()
+    return render_template('quadro.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
+
+# ===== ROTAS PROVISORIAS: quem for fazer a rota real deve SUBSTITUIR estas =====
 
 @app.route('/logout')
 @login_required
