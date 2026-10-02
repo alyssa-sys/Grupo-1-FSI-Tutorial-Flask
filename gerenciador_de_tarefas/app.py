@@ -12,7 +12,7 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login' # type: ignore
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -37,7 +37,7 @@ def registro():
             flash('Já existe um usuário com esse email ou nome de usuário.', 'danger')
             return redirect(url_for('registro'))
 
-        novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha)
+        novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha) # type: ignore
         db.session.add(novo_usuario)
         db.session.commit()
 
@@ -91,7 +91,7 @@ def adicionar_tarefa():
         status = request.form['status']
         responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
 
-        nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id)
+        nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id) # type: ignore
 
         db.session.add(nova_tarefa)
         db.session.commit()
