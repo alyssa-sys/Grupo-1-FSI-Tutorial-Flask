@@ -14,13 +14,45 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 #login_manager.login_view = 'login'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(Usuario, int(user_id))
+
+@app.route('/')
+def home():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    return redirect(url_for('login'))
+
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
+    if request.method == 'POST':
+        email = request.form['email']
+        nomeUsuario = request.form['nomeUsuario']
+        nome = request.form.get('nome') or nomeUsuario
+        senha = generate_password_hash(request.form['senha'])
+
+        usuario = Usuario.query.filter((Usuario.email == email) | (Usuario.nomeUsuario == nomeUsuario)).first()
+        if usuario:
+            flash('Email já cadastrado.', 'danger')
+            return redirect(url_for('registro'))
+
+        novo_usuario = Usuario(nomeUsuario=nomeUsuario, nome=nome, email=email, senha=senha)
+        db.session.add(novo_usuario)
+        db.session.commit()
+
+        flash('Usuário registrado com sucesso!', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('registro.html')
+
 #admin
 @app.route('/admin')
 @login_required
 def admin_dashboard():
-    if current_user.role != 'admin':
+    if current_user.cargo != 'admin':
         flash("Access denied", 'danger')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('quadro'))
 
     tarefas = Tarefa.query.all()
     return render_template('admin_dashboard.html', tarefas = tarefas)
@@ -33,7 +65,7 @@ def adicionar_tarefa():
         titulo = request.form['titulo']
         descricao = request.form['descricao']
         status = request.form['status']
-        responsavel_id = request.form.get('responsavel_id', current_user.id) 
+        responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
 
         nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id)
 
