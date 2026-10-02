@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Todas as tarefas (Visualização do administrador)</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Criado por</th>
+            <th>Compartilhado com</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tarefa in tarefas %}
+        <tr>
+            <td>{{ tarefa.titulo }}</td>
+            <td>{{ tarefa.descricao }}</td> 
+            <td>{{ tarefa.status }}</td>
+            <td>{{ tarefa.criado_por }}</td>
+            <td>{{ tarefa.compartilhado_com }}</td>
+        </tr>
+        {% endfor %} 
+    </tbody>
+</table>
+{% endblock %}
