@@ -14,7 +14,17 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 #login_manager.login_view = 'login'
 
+#admin
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    if current_user.role != 'admin':
+        flash("Access denied", 'danger')
+        return redirect(url_for('dashboard'))
 
+    tarefas = Tarefa.query.all()
+    return render_template('admin_dashboard.html', tarefas = tarefas)
+    
 #adicionar tarefa
 @app.route('/adicionar_tarefa', methods=['GET', 'POST'])
 @login_required
