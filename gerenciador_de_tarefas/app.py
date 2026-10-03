@@ -21,7 +21,7 @@ def load_user(user_id):
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('quadro'))
     return redirect(url_for('login'))
 
 @app.route('/registro', methods=['GET', 'POST'])
