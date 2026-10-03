@@ -89,7 +89,7 @@ def adicionar_tarefa():
         db.session.commit()
 
         flash('Tarefa adicionada com sucesso!', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('quadro'))
     
     usuarios = Usuario.query.filter(Usuario.id != current_user.id).all()
     return render_template('adicionar_tarefa.html', usuarios=usuarios)
@@ -98,10 +98,10 @@ def adicionar_tarefa():
 @app.route('/editar_tarefa/<int:tarefa_id>', methods=['GET', 'POST'])
 @login_required
 def editar_tarefa(tarefa_id):
-    tarefa = Tarefa.query.get_or_404(tarefa_id)
+    tarefa = db.get_or_404(Tarefa, tarefa_id)
     if current_user.id != tarefa.criador_id and current_user.id != tarefa.responsavel_id:
         flash('Você não tem permissão para editar esta tarefa.', 'danger')
-        return redirect(url_for('index'))
+        return redirect(url_for('quadro'))
     if request.method == 'POST':
         tarefa.titulo = request.form['titulo']
         tarefa.descricao = request.form['descricao']
@@ -109,7 +109,7 @@ def editar_tarefa(tarefa_id):
 
         db.session.commit()
         flash('Tarefa atualizada com sucesso!', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('quadro'))
     return render_template('editar_tarefa.html', tarefa=tarefa)
 
 #excluir tarefa
@@ -119,7 +119,7 @@ def excluir_tarefa(tarefa_id):
     tarefa = db.get_or_404(Tarefa, tarefa_id)
     if current_user.id != tarefa.criador_id and current_user.id != tarefa.responsavel_id:
         flash('Você não tem permissão para excluir esta tarefa.', 'danger')
-        return redirect(url_for('index'))
+        return redirect(url_for('quadro'))
     
     db.session.delete(tarefa)
     db.session.commit()
