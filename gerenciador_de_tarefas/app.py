@@ -141,7 +141,8 @@ def quadro():
 @app.route('/logout')
 @login_required
 def logout():
-    return 'Logout (em construção)'
+    logout_user()
+    return redirect(url_for('login'))
 # ===== fim das rotas provisorias =====
 
 if __name__ == '__main__':
