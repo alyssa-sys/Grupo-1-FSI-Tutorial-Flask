@@ -94,7 +94,6 @@ def adicionar_tarefa():
     usuarios = Usuario.query.filter(Usuario.id != current_user.id).all()
     return render_template('adicionar_tarefa.html', usuarios=usuarios)
 
-
 #editar tarefa
 @app.route('/editar_tarefa/<int:tarefa_id>', methods=['GET', 'POST'])
 @login_required
@@ -128,7 +127,7 @@ def excluir_tarefa(tarefa_id):
     flash('Tarefa excluída com sucesso!', 'success')
     return redirect(url_for('index'))
 
-# * rota do quadro (Dashboard)
+#rota do quadro (Dashboard)
 @app.route('/quadro')
 @login_required
 def quadro():
@@ -136,14 +135,11 @@ def quadro():
     tarefas_compartilhadas = Tarefa.query.filter_by(responsavel_id=current_user.id).all()
     return render_template('quadro.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
 
-# ===== ROTAS PROVISORIAS: quem for fazer a rota real deve SUBSTITUIR estas =====
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
-# ===== fim das rotas provisorias =====
 
 if __name__ == '__main__':
     with app.app_context():
