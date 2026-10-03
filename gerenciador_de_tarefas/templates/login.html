@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{$ block title %}Login - Gerenciador de Tarefas{% endblock %}
+{% block title %}Login - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-6 col-lg-4">
@@ -24,6 +24,6 @@
             <p class="text-center text-secondary mt-4 mb-0">Não tem uma conta? <a href="{{ url_for('registro') }}" class="fw-semibold text-decoration-none">Registre-se aqui</a>
             </p>
         </div>
-    </div>>
+    </div>
 </div>  
 {% endblock %}
