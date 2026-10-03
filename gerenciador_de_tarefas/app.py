@@ -80,7 +80,7 @@ def adicionar_tarefa():
     if request.method == 'POST':
         titulo = request.form['titulo']
         descricao = request.form['descricao']
-        status = request.form['status']
+        status = 'Pendente'
         responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
 
         nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id) # type: ignore
