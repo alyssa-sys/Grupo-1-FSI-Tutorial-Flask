@@ -1,29 +1,35 @@
 {% extends "base.html" %}
 {% block title %}Login - Gerenciador de Tarefas{% endblock %}
 {% block content %}
+
 <div class="row justify-content-center mt-5">
     <div class="col-12 col-md-6 col-lg-4">
         <div class="cartao">
             <div class="text-center mb-4">
-                <h2 class="fw-bold mb-1">Bem-vindo de volta!</h2>
-                <p class="text-secondary">Entre para ver suas tarefas</p>
+                <h2 class="fw-bold mb-1">Bem-vindo de volta</h2>
+                <p class="text-secondary mb-0">Entre para ver suas tarefas</p>
             </div>
 
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label" for="email">E-mail</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu e-mail" required autofocus>
+                    <input type="email" id="email" name="email" class="form-control"
+                           placeholder="voce@email.com" required autofocus>
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="senha">Senha</label>
-                    <input type="password" id="senha" name="senha" class="form-control" placeholder="Digite sua senha" required>
+                    <input type="password" id="senha" name="senha" class="form-control"
+                           placeholder="Sua senha" required>
                 </div>
                 <button type="submit" class="btn btn-principal w-100">Entrar</button>
             </form>
 
-            <p class="text-center text-secondary mt-4 mb-0">Não tem uma conta? <a href="{{ url_for('registro') }}" class="fw-semibold text-decoration-none">Registre-se aqui</a>
+            <p class="text-center text-secondary mt-4 mb-0">
+                Não tem uma conta?
+                <a href="{{ url_for('registro') }}" class="fw-semibold text-decoration-none">Registre-se aqui</a>
             </p>
         </div>
     </div>
-</div>  
+</div>
+
 {% endblock %}
