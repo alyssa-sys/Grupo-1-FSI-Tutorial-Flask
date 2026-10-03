@@ -27,5 +27,6 @@ Use "python app.py" para iniciar a aplicação Flask localmente. Esse comando ex
 - Para iniciar a aplicação localmente, execute:
 
 ```bash
+cd gerenciador_de_tarefas
 python app.py
 ```
