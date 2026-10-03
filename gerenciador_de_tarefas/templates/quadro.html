@@ -17,6 +17,7 @@
         <li class="list-group-item">
             <strong>{{ tarefa.titulo }}</strong> - {{ tarefa.status }}
                 <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                <a href="{{ url_for('excluir_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-danger">Excluir</a>
         </li>
     {% endfor %}
 </ul>
