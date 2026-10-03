@@ -16,6 +16,7 @@
     {% for tarefa in tarefas_compartilhadas %}
         <li class="list-group-item">
             <strong>{{ tarefa.titulo }}</strong> - {{ tarefa.status }}
+                <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-primary">Editar</a>
         </li>
     {% endfor %}
 </ul>
