@@ -1,49 +1,94 @@
-<html>
-    <head>
-        <title>{% block title %}Gerenciador de Tarefas{% endblock %}</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    </head>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gerenciador de Tarefas{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        :root {
+            --cor-primaria: #4f46e5;
+            --cor-primaria-escura: #4338ca;
+            --cor-fundo: #f3f4f8;
+            --cor-texto: #1f2937;
+            --cor-suave: #6b7280;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+        }
+        .navbar { background: #111827 !important; }
+        .navbar-brand { font-weight: 700; letter-spacing: .3px }
+        .nav-link {font-weight: 500; }
 
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-            <a class="nav-brand" href="{{ url_for('quadro') }}">Gerenciador de Tarefas</a>
-            <div class="collapse navbar-collapse">
+        .cartao {
+            background-color: #fff;
+            border: 0;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: .65rem .9rem;
+            border: 1px solid #e5e7eb;  
+        }
+        .form -control:focus, .form-select:focus {
+            border-color: var(--cor-primaria);
+            box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .15);
+        }
+        .form-label { font-weight: 500; font-size: .9rem; }
+        .btn-principal {
+            background: var(--cor-primaria);
+            border: 0;
+            color: #fff;
+            border-radius: 10px;
+            padding: .7rem 1rem;
+            font-weight: 600;
+            transition: background-color .2s;
+        }
+        .btn-principal:hover { background-color: var(--cor-primaria-escura); }
+        a { color: var(--cor-primaria); }
+        .alert {border-radius: 12px; border: 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark px-3">
+            <a class="navbar-brand" href="{{ url_for('quadro') }}">📋Gerenciador de Tarefas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('quadro') }}">Quadro</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('adicionar_tarefa') }}">Adicionar Tarefa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('quadro') }}">Quadro</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('adicionar_tarefa') }}">Adicionar Tarefa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('registro') }}">Registrar</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('registro') }}">Registrar</a></li>
                     {% endif %}
                 </ul>
             </div>
-        </nav>
+    </nav>
 
-        <div class="container mt-4">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-            {% block content %} {% endblock %}
-        </div>
-    </body>
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
