@@ -125,7 +125,7 @@ def excluir_tarefa(tarefa_id):
     db.session.commit()
 
     flash('Tarefa excluída com sucesso!', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('quadro'))
 
 #rota do quadro (Dashboard)
 @app.route('/quadro')
