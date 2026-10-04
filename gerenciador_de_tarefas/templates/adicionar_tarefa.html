@@ -26,7 +26,7 @@
                     <select id="responsavel_id" name="responsavel_id" class="form-select">
                         <option value="">Selecione um responsável</option>
                         {% for usuario in usuarios %}
-                            <option value="{{ usuario.id }}">{{ usuario.username }}</option>
+                            <option value="{{ usuario.id }}">{{ usuario.nomeUsuario }}</option>
                         {% endfor %}
                     </select>
                 </div>
