@@ -14,6 +14,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login' # type: ignore
 
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Usuario, int(user_id))
@@ -23,7 +25,6 @@ def home():
     if current_user.is_authenticated:
         return redirect(url_for('quadro'))
     return redirect(url_for('login'))
-
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
@@ -102,6 +103,7 @@ def adicionar_tarefa():
     return render_template('adicionar_tarefa.html', usuarios=usuarios)
 
 #editar tarefa
+STATUS_VALIDOS = ['Pendente', 'Em andamento', 'Concluída', 'Cancelada']
 @app.route('/editar_tarefa/<int:tarefa_id>', methods=['GET', 'POST'])
 @login_required
 def editar_tarefa(tarefa_id):
@@ -110,6 +112,11 @@ def editar_tarefa(tarefa_id):
         flash('Você não tem permissão para editar esta tarefa.', 'danger')
         return redirect(url_for('quadro'))
     if request.method == 'POST':
+        status = request.form['status']
+        if status not in STATUS_VALIDOS:
+            flash('Status inválido.', 'danger')
+            return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
+        
         tarefa.titulo = request.form['titulo']
         tarefa.descricao = request.form['descricao']
         tarefa.status = request.form['status']
