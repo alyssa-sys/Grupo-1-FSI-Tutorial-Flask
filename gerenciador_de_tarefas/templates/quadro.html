@@ -14,7 +14,7 @@
 </style>
 
 {% macro coluna(titulo, lista, cor_borda, cor_badge) %}
-<div class="col-12 col-md-6 col-lg-3">
+<div class="col-12 col-lg-4">
     <div class="coluna" style="border-top: 4px solid {{ cor_borda }};">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-bold mb-0">{{ titulo }}</h6>
@@ -58,16 +58,14 @@
 
 <h5 class="fw-semibold mb-3">Suas tarefas</h5>
 <div class="row g-3">
-    {{ coluna('Pendente', minhas_tarefas|rejectattr('status', 'in', ['A fazer', 'Em andamento', 'Concluída'])|list, '#0dcaf0', 'bg-info text-dark') }}
-    {{ coluna('A fazer', minhas_tarefas|selectattr('status', 'equalto', 'A fazer')|list, '#6c757d', 'bg-secondary') }}
+    {{ coluna('Pendente', minhas_tarefas|rejectattr('status', 'in', ['Em andamento', 'Concluída'])|list, '#0dcaf0', 'bg-info text-dark') }}
     {{ coluna('Em andamento', minhas_tarefas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'bg-warning text-dark') }}
     {{ coluna('Concluída', minhas_tarefas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'bg-success') }}
 </div>
 
 <h5 class="fw-semibold mt-5 mb-3">Compartilhadas com você</h5>
 <div class="row g-3 mb-5">
-    {{ coluna('Pendente', tarefas_compartilhadas|rejectattr('status', 'in', ['A fazer', 'Em andamento', 'Concluída'])|list, '#0dcaf0', 'bg-info text-dark') }}
-    {{ coluna('A fazer', tarefas_compartilhadas|selectattr('status', 'equalto', 'A fazer')|list, '#6c757d', 'bg-secondary') }}
+    {{ coluna('Pendente', tarefas_compartilhadas|rejectattr('status', 'in', ['Em andamento', 'Concluída'])|list, '#0dcaf0', 'bg-info text-dark') }}
     {{ coluna('Em andamento', tarefas_compartilhadas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'bg-warning text-dark') }}
     {{ coluna('Concluída', tarefas_compartilhadas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'bg-success') }}
 </div>

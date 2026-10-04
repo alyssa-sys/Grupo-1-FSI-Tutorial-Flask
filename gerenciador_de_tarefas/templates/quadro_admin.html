@@ -27,19 +27,16 @@
 </div>
 
 <div class="row g-3 mb-4">
-    <div class="col-6 col-md">
+    <div class="col-6 col-md-3">
         <div class="stat"><div class="num">{{ tarefas|length }}</div><div class="text-secondary small">Total</div></div>
     </div>
-    <div class="col-6 col-md">
-        <div class="stat"><div class="num" style="color:#0aa2c0;">{{ tarefas|rejectattr('status', 'in', ['A fazer', 'Em andamento', 'Concluída'])|list|length }}</div><div class="text-secondary small">Pendente</div></div>
+    <div class="col-6 col-md-3">
+        <div class="stat"><div class="num" style="color:#0aa2c0;">{{ tarefas|rejectattr('status', 'in', ['Em andamento', 'Concluída'])|list|length }}</div><div class="text-secondary small">Pendente</div></div>
     </div>
-    <div class="col-6 col-md">
-        <div class="stat"><div class="num" style="color:#6c757d;">{{ tarefas|selectattr('status', 'equalto', 'A fazer')|list|length }}</div><div class="text-secondary small">A fazer</div></div>
-    </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md-3">
         <div class="stat"><div class="num" style="color:#d39e00;">{{ tarefas|selectattr('status', 'equalto', 'Em andamento')|list|length }}</div><div class="text-secondary small">Em andamento</div></div>
     </div>
-    <div class="col-6 col-md">
+    <div class="col-6 col-md-3">
         <div class="stat"><div class="num" style="color:#198754;">{{ tarefas|selectattr('status', 'equalto', 'Concluída')|list|length }}</div><div class="text-secondary small">Concluídas</div></div>
     </div>
 </div>
@@ -47,7 +44,6 @@
 <div class="d-flex flex-wrap gap-2 mb-3">
     <button type="button" class="filtro ativo" data-filtro="todas">Todas</button>
     <button type="button" class="filtro" data-filtro="Pendente">Pendente</button>
-    <button type="button" class="filtro" data-filtro="A fazer">A fazer</button>
     <button type="button" class="filtro" data-filtro="Em andamento">Em andamento</button>
     <button type="button" class="filtro" data-filtro="Concluída">Concluída</button>
 </div>
@@ -74,8 +70,6 @@
                             <span class="badge rounded-pill bg-success">{{ tarefa.status }}</span>
                         {% elif tarefa.status == 'Em andamento' %}
                             <span class="badge rounded-pill bg-warning text-dark">{{ tarefa.status }}</span>
-                        {% elif tarefa.status == 'A fazer' %}
-                            <span class="badge rounded-pill bg-secondary">{{ tarefa.status }}</span>
                         {% else %}
                             <span class="badge rounded-pill bg-info text-dark">{{ tarefa.status }}</span>
                         {% endif %}
