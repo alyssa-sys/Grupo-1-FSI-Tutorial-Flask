@@ -24,7 +24,8 @@
                 <div class="mb-4">
                     <label class="form-label" for="responsavel_id">Responsável</label>
                     <select id="responsavel_id" name="responsavel_id" class="form-select">
-                        <option value="">Selecione um responsável</option>
+                        <option value="" selected disabled hidden>Atribuir a outra pessoa?</option>
+                        <option value="">Eu mesmo</option>
                         {% for usuario in usuarios %}
                             <option value="{{ usuario.id }}">{{ usuario.nomeUsuario }}</option>
                         {% endfor %}
