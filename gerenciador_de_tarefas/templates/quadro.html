@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Quadro de Tarefas</h2>
+
+<h4 class="mt-4">Suas tarefas</h4>
 <ul class="list-group">
-    {% for tarefa in tarefas %}
+    {% for tarefa in minhas_tarefas %}
         <li class="list-group-item">
             <strong>{{ tarefa.titulo }}</strong> - {{ tarefa.status }}
                 <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-primary">Editar</a>

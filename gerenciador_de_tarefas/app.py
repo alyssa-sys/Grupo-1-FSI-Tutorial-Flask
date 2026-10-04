@@ -132,7 +132,10 @@ def excluir_tarefa(tarefa_id):
 @login_required
 def quadro():
     minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
-    tarefas_compartilhadas = Tarefa.query.filter_by(responsavel_id=current_user.id).all()
+    tarefas_compartilhadas = Tarefa.query.filter(
+        Tarefa.responsavel_id==current_user.id, 
+        Tarefa.criador_id!=current_user.id
+        ).all()
     return render_template('quadro.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
 
 @app.route('/logout')
