@@ -2,17 +2,6 @@
 {% block title %}Painel do Administrador - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-<style>
-    .stat { background: #fff; border-radius: 14px; padding: 1rem 1.25rem; box-shadow: 0 6px 20px rgba(0, 0, 0, .05); }
-    .stat .num { font-size: 1.8rem; font-weight: 700; line-height: 1; }
-    .filtro { border: 1px solid #e5e7eb; background: #fff; border-radius: 20px; padding: .3rem .9rem; font-size: .85rem; font-weight: 500; color: var(--cor-suave); }
-    .filtro.ativo { background: var(--cor-primaria); border-color: var(--cor-primaria); color: #fff; }
-    .avatar {
-        width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-        background: #e0e7ff; color: var(--cor-primaria); font-size: .75rem; font-weight: 700; margin-right: .4rem;
-    }
-</style>
-
 {% macro pessoa(usuario) %}
     {% if usuario %}
         <span class="avatar">{{ usuario.nomeUsuario[:1]|upper }}</span>{{ usuario.nomeUsuario }}

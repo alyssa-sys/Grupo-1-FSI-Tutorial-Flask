@@ -2,40 +2,6 @@
 {% block title %}Login - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-<style>
-    .login-wrap { max-width: 880px; margin: 2rem auto; }
-    .login-card {
-        display: flex; background: #fff; border-radius: 20px; overflow: hidden;
-        box-shadow: 0 20px 50px rgba(79, 70, 229, .15);
-    }
-    .login-lado {
-        flex: 1; padding: 3rem 2.5rem; color: #fff;
-        display: flex; flex-direction: column; justify-content: center;
-        background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    }
-    .login-logo {
-        width: 56px; height: 56px; border-radius: 16px; margin-bottom: 1.5rem;
-        background: rgba(255, 255, 255, .2);
-        display: flex; align-items: center; justify-content: center;
-    }
-    .login-lado ul { list-style: none; padding: 0; margin: 1.5rem 0 0; }
-    .login-lado li { margin-bottom: .8rem; display: flex; gap: .6rem; align-items: center; }
-    .login-form { flex: 1; padding: 3rem 2.5rem; }
-    .campo-icone { position: relative; }
-    .campo-icone > svg {
-        position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af;
-    }
-    .campo-icone input { padding-left: 2.6rem; }
-    .ver-senha {
-        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-        background: none; border: 0; color: var(--cor-primaria); font-size: .8rem; font-weight: 600;
-    }
-    @media (max-width: 767px) {
-        .login-lado { display: none; }
-        .login-form { padding: 2rem 1.5rem; }
-    }
-</style>
-
 <div class="login-wrap">
     <div class="login-card">
 

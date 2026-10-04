@@ -2,17 +2,6 @@
 {% block title %}Quadro - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-<style>
-    .coluna { background: #fff; border-radius: 14px; padding: 1rem; box-shadow: 0 6px 20px rgba(0, 0, 0, .05); height: 100%; }
-    .cartao-tarefa {
-        background: #f8f9fc; border: 1px solid #eceef5; border-radius: 12px;
-        padding: .9rem 1rem; margin-bottom: .75rem; transition: box-shadow .15s, transform .15s;
-    }
-    .cartao-tarefa:hover { box-shadow: 0 6px 16px rgba(79, 70, 229, .12); transform: translateY(-1px); }
-    .area-clique { cursor: pointer; }
-    .cartao-tarefa .acoes .btn { padding: .2rem .7rem; font-size: .8rem; border-radius: 8px; }
-</style>
-
 {% macro coluna(titulo, lista, cor_borda, cor_badge) %}
 <div class="col-12 col-md-6 col-lg-3">
     <div class="coluna" style="border-top: 4px solid {{ cor_borda }};">
