@@ -27,8 +27,8 @@ def home():
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
-        email = request.form['email']
-        nomeUsuario = request.form['nomeUsuario']
+        email = request.form['email'].strip().lower()
+        nomeUsuario = request.form['nomeUsuario'].strip()
         nome = request.form.get('nome') or nomeUsuario
         senha = generate_password_hash(request.form['senha'])
 
@@ -49,7 +49,7 @@ def registro():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        email = request.form['email'].strip().lower()
         senha = request.form['senha']
 
         usuario = Usuario.query.filter_by(email=email).first()
