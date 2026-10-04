@@ -113,7 +113,7 @@ def editar_tarefa(tarefa_id):
     return render_template('editar_tarefa.html', tarefa=tarefa)
 
 #excluir tarefa
-@app.route('/excluir_tarefa/<int:tarefa_id>')
+@app.route('/excluir_tarefa/<int:tarefa_id>', methods=['POST'])
 @login_required
 def excluir_tarefa(tarefa_id):
     tarefa = db.get_or_404(Tarefa, tarefa_id)
