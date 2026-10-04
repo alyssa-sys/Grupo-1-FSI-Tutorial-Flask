@@ -30,7 +30,10 @@ def registro():
     if request.method == 'POST':
         email = request.form['email'].strip().lower()
         nomeUsuario = request.form['nomeUsuario'].strip()
-        nome = request.form.get('nome') or nomeUsuario
+        if not nomeUsuario:
+            flash('O nome de usuário é obrigatório.', 'danger')
+            return redirect(url_for('registro'))
+        nome = request.form.get('nome', '').strip() or nomeUsuario
         senha = generate_password_hash(request.form['senha'])
 
         usuario = Usuario.query.filter((Usuario.email == email) | (Usuario.nomeUsuario == nomeUsuario)).first()
