@@ -81,7 +81,14 @@ def adicionar_tarefa():
         titulo = request.form['titulo']
         descricao = request.form['descricao']
         status = 'Pendente'
-        responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
+        try:
+            responsavel_id = int(request.form.get('responsavel_id') or current_user.id)
+        except ValueError:
+            flash('ID do responsável inválido.', 'danger')
+            return redirect(url_for('adicionar_tarefa'))
+        if not db.session.get(Usuario, responsavel_id):
+            flash('Usuário responsável não encontrado.', 'danger')
+            return redirect(url_for('adicionar_tarefa'))
 
         nova_tarefa = Tarefa(titulo=titulo, descricao=descricao, status=status, criador_id=current_user.id, responsavel_id=responsavel_id) # type: ignore
 
