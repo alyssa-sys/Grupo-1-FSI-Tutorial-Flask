@@ -6,6 +6,7 @@ Requisitos para rodar o código:
 
 - Python 3.14.8 instalado
 - pip atualizado
+- extensão better jinja
 
 ```bash
 pip install flask
@@ -21,6 +22,16 @@ Crie um Gerenciador de Atividades usando python/flask e os tutoriais:
 Uma apresentação mostrando o funcionamento interno da sua aplicação. Nada de código. Separe sua aplicação em módulos e explique usando diagrama de atividades e diagrama de fluxo de tela. Os diagramas deverão ser desenhados no Figma.
 
 - <https://canva.link/wff9ksxj629wl2b> Link da apresentação
+
+Após instalar a extensão Better Jinja no VS Code, crie a pasta `.vscode` na raiz do projeto (se ela ainda não existir) e dentro dela crie o arquivo `settings.json` com o seguinte conteúdo para que o editor reconheça corretamente os arquivos HTML do Flask/Jinja:
+
+```json
+{
+    "files.associations": {
+        "**/templates/**/*.html": "jinja-html"
+    }
+}
+```
 
 Use "python app.py" para iniciar a aplicação Flask localmente. Esse comando executa o arquivo principal `app.py` e sobe o servidor em desenvolvimento, permitindo testar a aplicação no navegador.
 
