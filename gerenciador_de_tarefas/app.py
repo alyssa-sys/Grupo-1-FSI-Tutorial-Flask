@@ -119,7 +119,7 @@ def editar_tarefa(tarefa_id):
         
         tarefa.titulo = request.form['titulo']
         tarefa.descricao = request.form['descricao']
-        tarefa.status = request.form['status']
+        tarefa.status = status
 
         db.session.commit()
         flash('Tarefa atualizada com sucesso!', 'success')
