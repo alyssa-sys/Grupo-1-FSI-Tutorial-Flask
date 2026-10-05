@@ -64,12 +64,18 @@
     <div class="container mt-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
+            <div class="toast-container position-fixed end-0 p-3 avisos">
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="toast toast-{{ 'sucesso' if category == 'success' else ('erro' if category == 'danger' else 'info') }}"
+                    role="alert" aria-live="assertive" aria-atomic="true"
+                    data-bs-delay="{{ 7000 if category == 'danger' else 4000 }}">
+                    <div class="d-flex">
+                        <div class="toast-body"><span class="toast-icone" aria-hidden="true"></span>{{ message }}</div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
                     </div>
+                </div>
                 {% endfor %}
+            </div>
             {% endif %}
         {% endwith %}
 
@@ -77,6 +83,13 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.querySelectorAll('.toast').forEach(function (el) {
+            bootstrap.Toast.getOrCreateInstance(el).show();
+        });
+    </script>
+    
     <script>
         (function () {
             var raiz = document.documentElement;

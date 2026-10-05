@@ -102,6 +102,23 @@
     font-weight: 600;
 }
 
+/* ===== Avisos (toasts) ===== */
+.avisos { top: 3.5rem; z-index: 1100; }
+.toast {
+    background: var(--cor-superficie);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    border-left: 5px solid var(--cor-primaria);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px var(--sombra);
+}
+.toast-sucesso { border-left-color: var(--status-concluida); }
+.toast-erro { border-left-color: var(--status-cancelada); }
+.toast-icone { font-weight: 700; margin-right: .5rem; }
+.toast-sucesso .toast-icone::before { content: "✓"; }
+.toast-erro .toast-icone::before { content: "✕"; }
+.toast-info .toast-icone::before { content: "ℹ"; }
+
 /* ===== Base ===== */
 body {
     font-family: 'Inter', sans-serif;
