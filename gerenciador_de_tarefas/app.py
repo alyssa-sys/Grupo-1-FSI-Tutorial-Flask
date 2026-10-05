@@ -21,7 +21,7 @@ def load_user(user_id):
     return db.session.get(Usuario, int(user_id))
 
 
-def validar_prazo(valor):
+def validar_prazo(valor, atual=None):
     valor = (valor or '').strip()
     if not valor:
         return None
@@ -29,6 +29,8 @@ def validar_prazo(valor):
         prazo = datetime.strptime(valor, '%Y-%m-%dT%H:%M')
     except ValueError:
         raise ValueError('Data e hora do prazo inválidas')
+    if atual is not None and prazo == atual.replace(second=0, microsecond=0):
+        return atual
     if prazo <= datetime.now():
         raise ValueError('O prazo deve ser uma data e hora futura')
     return prazo
@@ -76,7 +78,7 @@ app.jinja_env.globals.update(
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('quadro'))
+        return voltar_para_lista()
     return redirect(url_for('login'))
 
 @app.route('/registro', methods=['GET', 'POST'])
@@ -84,8 +86,8 @@ def registro():
     if request.method == 'POST':
         email = request.form['email'].strip().lower()
         nomeUsuario = request.form['nomeUsuario'].strip()
-        if not nomeUsuario:
-            flash('O nome de usuário é obrigatório.', 'danger')
+        if not nomeUsuario or len(nomeUsuario) > 50 or '@' in nomeUsuario:
+            flash('Nome de usuário inválido. Use até 50 caracteres, exceto "@".', 'danger')
             return redirect(url_for('registro'))
         nome = request.form.get('nome', '').strip() or nomeUsuario
         senha = generate_password_hash(request.form['senha'])
@@ -143,6 +145,9 @@ def adicionar_tarefa():
     if request.method == 'POST':
         titulo = request.form['titulo'].strip()
         descricao = request.form['descricao'].strip()
+        if not titulo or not descricao:
+            flash('Título e descrição são obrigatórios.', 'danger')
+            return redirect(url_for('adicionar_tarefa'))
         status = 'Pendente'
 
         prioridade = request.form.get('prioridade', 'A definir')
@@ -203,12 +208,15 @@ def editar_tarefa(tarefa_id):
                 flash('Prioridade inválida.', 'danger')
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
             try:
-                prazo = validar_prazo(request.form.get('prazo'))
+                prazo = validar_prazo(request.form.get('prazo'), tarefa.prazo)
             except ValueError as e:
                 flash(str(e), 'danger')
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
             tarefa.titulo = request.form['titulo'].strip()
             tarefa.descricao = request.form['descricao'].strip()
+            if not tarefa.titulo or not tarefa.descricao:
+                flash('Título e descrição são obrigatórios.', 'danger')
+                return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
             tarefa.prioridade = prioridade
             tarefa.prazo = prazo
 
