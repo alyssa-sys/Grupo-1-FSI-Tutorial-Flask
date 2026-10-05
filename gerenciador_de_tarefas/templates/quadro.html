@@ -2,7 +2,7 @@
 {% block title %}Quadro - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-{% macro coluna(titulo, lista, cor_borda, cor_badge) %}
+{% macro coluna(titulo, lista, classe) %}
 <div class="col-12 col-md-6 col-lg-3">
     <div class="coluna {{ classe }}">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -47,18 +47,18 @@
 
 <h5 class="fw-semibold mb-3">Suas tarefas</h5>
 <div class="row g-3">
-    {{ coluna('Pendente', minhas_tarefas|selectattr('status', 'equalto', 'Pendente')|list, '#0dcaf0', 'status-pendente') }}
-    {{ coluna('Em andamento', minhas_tarefas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'status-andamento') }}
-    {{ coluna('Concluída', minhas_tarefas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'status-concluida') }}
-    {{ coluna('Cancelada', minhas_tarefas|selectattr('status', 'equalto', 'Cancelada')|list, '#dc3545', 'status-cancelada') }}
+    {{ coluna('Pendente', minhas_tarefas|selectattr('status', 'equalto', 'Pendente')|list, 'status-pendente') }}
+    {{ coluna('Em andamento', minhas_tarefas|selectattr('status', 'equalto', 'Em andamento')|list, 'status-andamento') }}
+    {{ coluna('Concluída', minhas_tarefas|selectattr('status', 'equalto', 'Concluída')|list, 'status-concluida') }}
+    {{ coluna('Cancelada', minhas_tarefas|selectattr('status', 'equalto', 'Cancelada')|list, 'status-cancelada') }}
 </div>
 
 <h5 class="fw-semibold mt-5 mb-3">Compartilhadas com você</h5>
 <div class="row g-3 mb-5">
-    {{ coluna('Pendente', tarefas_compartilhadas|selectattr('status', 'equalto', 'Pendente')|list, '#0dcaf0', 'status-pendente') }}
-    {{ coluna('Em andamento', tarefas_compartilhadas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'status-andamento') }}
-    {{ coluna('Concluída', tarefas_compartilhadas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'status-concluida') }}
-    {{ coluna('Cancelada', tarefas_compartilhadas|selectattr('status', 'equalto', 'Cancelada')|list, '#dc3545', 'status-cancelada') }}
+    {{ coluna('Pendente', tarefas_compartilhadas|selectattr('status', 'equalto', 'Pendente')|list, 'status-pendente') }}
+    {{ coluna('Em andamento', tarefas_compartilhadas|selectattr('status', 'equalto', 'Em andamento')|list, 'status-andamento') }}
+    {{ coluna('Concluída', tarefas_compartilhadas|selectattr('status', 'equalto', 'Concluída')|list, 'status-concluida') }}
+    {{ coluna('Cancelada', tarefas_compartilhadas|selectattr('status', 'equalto', 'Cancelada')|list, 'status-cancelada') }}
 </div>
 
 <!-- Janela de detalhes (somente leitura) -->
