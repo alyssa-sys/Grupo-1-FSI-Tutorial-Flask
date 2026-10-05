@@ -1,21 +1,7 @@
 {% extends "base.html" %}
+
 {% block title %}Painel do Administrador - Gerenciador de Tarefas{% endblock %}
 {% block content %}
-
-{# botões de filtro: depois do botão "Todas" #}
-{% for s in STATUS_VALIDOS %}
-    <button type="button" class="filtro" data-filtro="{{ s }}">{{ s }}</button>
-{% endfor %}
-
-{# selo de status na tabela #}
-<span class="selo {{ CLASSES_STATUS.get(tarefa.status, 'status-pendente') }}">{{ tarefa.status }}</span>
-
-{# select de status da coluna Ações, já com rótulo para leitores de tela #}
-<select name="status" class="form-select form-select-sm" aria-label="Status da tarefa" onchange="this.form.submit()">
-    {% for s in STATUS_VALIDOS %}
-        <option value="{{ s }}" {{ 'selected' if s == tarefa.status else '' }}>{{ s }}</option>
-    {% endfor %}
-</select>
 
 {% macro pessoa(usuario) %}
     {% if usuario %}
@@ -58,15 +44,15 @@
 
 <div class="cartao" style="padding:1rem;">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0"">
             <thead>
                 <tr class="text-secondary small text-uppercase">
                     <th>Título</th>
                     <th>Descrição</th>
-                    <th>Status</th>
+                    <th style="width: 150px;">Status</th>
                     <th>Prazo</th>
                     <th>Prioridade</th>
-                    <th>Criado por</th>
+                    <th style="width: 300px;">Criado por</th>
                     <th>Responsável</th>
                     <th class="text-end">Ações</th>
                 </tr>
@@ -82,11 +68,11 @@
                 >
 
                     <td class="fw-semibold">
-                        {{ tarefa.titulo }}
+                        {{ tarefa.titulo | truncate(15) }}
                     </td>
 
                     <td class="text-secondary small">
-                        {{ (tarefa.descricao or '')|truncate(60) }}
+                        {{ (tarefa.descricao or '')|truncate(40) }}
                     </td>
 
                     <td>
@@ -141,7 +127,7 @@
                                     onchange="this.form.submit()"
                                     aria-label="Alterar status da tarefa"
                                 >
-                                    {% for s in classes %}
+                                    {% for s in STATUS_VALIDOS %}
                                         <option
                                             value="{{ s }}"
                                             {{ 'selected' if s == tarefa.status }}
