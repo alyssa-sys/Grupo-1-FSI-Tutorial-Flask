@@ -148,12 +148,21 @@ def excluir_tarefa(tarefa_id):
 @app.route('/quadro')
 @login_required
 def quadro():
-    minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
-    tarefas_compartilhadas = Tarefa.query.filter(
-        Tarefa.responsavel_id==current_user.id, 
-        Tarefa.criador_id!=current_user.id
-        ).all()
-    return render_template('quadro.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
+    recebidas = Tarefa.query.filter(
+        Tarefa.responsavel_id == current_user.id,
+        Tarefa.criador_id != current_user.id
+    ).all()
+    para_mim = Tarefa.query.filter(
+        Tarefa.responsavel_id == current_user.id,
+        Tarefa.criador_id == current_user.id
+    ).all()
+    delegadas = Tarefa.query.filter(
+        Tarefa.criador_id == current_user.id,
+        Tarefa.responsavel_id != current_user.id
+    ).all()
+    return render_template('quadro.html',
+                           atribuidas_a_mim=recebidas + para_mim,
+                           delegadas=delegadas)
 
 @app.route('/logout')
 @login_required
