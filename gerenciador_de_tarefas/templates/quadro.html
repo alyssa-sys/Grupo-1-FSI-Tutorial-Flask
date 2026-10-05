@@ -1,10 +1,10 @@
-{% extends "base.html" %}
+ {% extends "base.html" %}
 {% block title %}Quadro - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
 {% macro coluna(titulo, lista, classe, rotulo) %}
 <div class="col-12 col-md-6 col-lg-3">
-    <div class="coluna {{ classe }}">
+    <div class="coluna {{ cor_badge }}">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-semibold mb-0">{{ titulo }}</h6>
             <span class="contador">{{ lista|length }}</span>
@@ -16,9 +16,10 @@
                  data-titulo="{{ tarefa.titulo }}"
                  data-descricao="{{ tarefa.descricao or '' }}"
                  data-status="{{ tarefa.status }}"
-                 data-cor="{{ classe }}"
+                 data-cor="{{ cor_badge }}"
                  data-criado="{{ tarefa.criador.nomeUsuario if tarefa.criador else '' }}"
                  data-compartilhado="{{ tarefa.responsavel.nomeUsuario if tarefa.responsavel else '' }}"
+                 data-rotulo="{{ 'Editar' if pode_editar(tarefa) else 'Alterar status' }}"
                  data-editar="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}">
                 <div class="fw-semibold mb-1">{{ tarefa.titulo }}</div>
                 {% if tarefa.descricao %}
@@ -31,11 +32,15 @@
                 {% endif %}
             </div>
             <div class="acoes d-flex gap-2 mt-3">
-                <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-principal">Editar</a>
+                <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-principal">
+                    {{ 'Editar' if pode_editar(tarefa) else 'Alterar status' }}
+                </a>
+                {% if pode_excluir(tarefa) %}
                 <form action="{{ url_for('excluir_tarefa', tarefa_id=tarefa.id) }}" method="POST"
                       onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
                     <button type="submit" class="btn btn-outline-danger">Excluir</button>
                 </form>
+                {% endif %}
             </div>
         </div>
         {% else %}
@@ -117,6 +122,7 @@
         status.textContent = d.status;
         status.className = 'selo ' + d.cor;
         document.getElementById('modalEditar').href = d.editar;
+        document.getElementById('modalEditar').textContent = d.rotulo;
     });
 </script>
 
