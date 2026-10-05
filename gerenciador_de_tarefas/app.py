@@ -20,7 +20,12 @@ def load_user(user_id):
     return db.session.get(Usuario, int(user_id))
 
 
-# Permissões das tarefas admin
+# ---------------------------------------------------------------
+# Permissões das tarefas
+#   Criador:     vê, edita tudo, muda o status e exclui.
+#   Responsável: vê e muda o status. Não exclui.
+#   Admin:       faz tudo em qualquer tarefa, inclusive pelo painel.
+# ---------------------------------------------------------------
 def eh_admin():
     return getattr(current_user, 'cargo', None) == 'admin'
 
@@ -147,7 +152,7 @@ def editar_tarefa(tarefa_id):
             flash('Status inválido.', 'danger')
             return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
 
-        # só criador e admin pode alterar
+        # só criador e admin alteram título e descrição
         if pode_editar(tarefa):
             tarefa.titulo = request.form['titulo']
             tarefa.descricao = request.form['descricao']
@@ -192,7 +197,7 @@ def excluir_tarefa(tarefa_id):
     flash('Tarefa excluída com sucesso!', 'success')
     return voltar_para_lista()
 
-#rota do quadro
+#rota do quadro (Dashboard)
 @app.route('/quadro')
 @login_required
 def quadro():

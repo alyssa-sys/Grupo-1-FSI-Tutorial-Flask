@@ -1,8 +1,8 @@
- {% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Quadro - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-{% macro coluna(titulo, lista, classe, rotulo) %}
+{% macro coluna(titulo, lista, cor_borda, cor_badge) %}
 <div class="col-12 col-md-6 col-lg-3">
     <div class="coluna {{ cor_badge }}">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -24,11 +24,6 @@
                 <div class="fw-semibold mb-1">{{ tarefa.titulo }}</div>
                 {% if tarefa.descricao %}
                     <div class="text-secondary small">{{ tarefa.descricao|truncate(70) }}</div>
-                {% endif %}
-                {% if rotulo == 'de' and tarefa.criador_id != tarefa.responsavel_id %}
-                    <div class="text-secondary small mt-1">de: {{ tarefa.criador.nomeUsuario }}</div>
-                {% elif rotulo == 'para' %}
-                    <div class="text-secondary small mt-1">para: {{ tarefa.responsavel.nomeUsuario }}</div>
                 {% endif %}
             </div>
             <div class="acoes d-flex gap-2 mt-3">
@@ -55,25 +50,21 @@
     <a href="{{ url_for('adicionar_tarefa') }}" class="btn btn-principal">+ Nova tarefa</a>
 </div>
 
-<h5 class="fw-semibold mb-3">Atribuídas a você</h5>
+<h5 class="fw-semibold mb-3">Suas tarefas</h5>
 <div class="row g-3">
-    {{ coluna('Pendente', atribuidas_a_mim|selectattr('status', 'equalto', 'Pendente')|list, 'status-pendente', 'de') }}
-    {{ coluna('Em andamento', atribuidas_a_mim|selectattr('status', 'equalto', 'Em andamento')|list, 'status-andamento', 'de') }}
-    {{ coluna('Concluída', atribuidas_a_mim|selectattr('status', 'equalto', 'Concluída')|list, 'status-concluida', 'de') }}
-    {{ coluna('Cancelada', atribuidas_a_mim|selectattr('status', 'equalto', 'Cancelada')|list, 'status-cancelada', 'de') }}
+    {{ coluna('Pendente', minhas_tarefas|selectattr('status', 'equalto', 'Pendente')|list, '#0dcaf0', 'status-pendente') }}
+    {{ coluna('Em andamento', minhas_tarefas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'status-andamento') }}
+    {{ coluna('Concluída', minhas_tarefas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'status-concluida') }}
+    {{ coluna('Cancelada', minhas_tarefas|selectattr('status', 'equalto', 'Cancelada')|list, '#dc3545', 'status-cancelada') }}
 </div>
 
-<h5 class="fw-semibold mt-5 mb-3">Atribuídas a outras pessoas</h5>
-{% if delegadas %}
+<h5 class="fw-semibold mt-5 mb-3">Compartilhadas com você</h5>
 <div class="row g-3 mb-5">
-    {{ coluna('Pendente', delegadas|selectattr('status', 'equalto', 'Pendente')|list, 'status-pendente', 'para') }}
-    {{ coluna('Em andamento', delegadas|selectattr('status', 'equalto', 'Em andamento')|list, 'status-andamento', 'para') }}
-    {{ coluna('Concluída', delegadas|selectattr('status', 'equalto', 'Concluída')|list, 'status-concluida', 'para') }}
-    {{ coluna('Cancelada', delegadas|selectattr('status', 'equalto', 'Cancelada')|list, 'status-cancelada', 'para') }}
+    {{ coluna('Pendente', tarefas_compartilhadas|selectattr('status', 'equalto', 'Pendente')|list, '#0dcaf0', 'status-pendente') }}
+    {{ coluna('Em andamento', tarefas_compartilhadas|selectattr('status', 'equalto', 'Em andamento')|list, '#ffc107', 'status-andamento') }}
+    {{ coluna('Concluída', tarefas_compartilhadas|selectattr('status', 'equalto', 'Concluída')|list, '#198754', 'status-concluida') }}
+    {{ coluna('Cancelada', tarefas_compartilhadas|selectattr('status', 'equalto', 'Cancelada')|list, '#dc3545', 'status-cancelada') }}
 </div>
-{% else %}
-<p class="text-secondary mb-5">Você ainda não atribuiu tarefas a outras pessoas.</p>
-{% endif %}
 
 <!-- Janela de detalhes (somente leitura) -->
 <div class="modal fade" id="modalTarefa" tabindex="-1" aria-hidden="true">
@@ -98,7 +89,7 @@
                         <p id="modalCriado" class="mb-0"></p>
                     </div>
                     <div class="col-6">
-                        <div class="text-secondary small text-uppercase mb-1">Responsável</div>
+                        <div class="text-secondary small text-uppercase mb-1">Compartilhado com</div>
                         <p id="modalCompartilhado" class="mb-0"></p>
                     </div>
                 </div>
