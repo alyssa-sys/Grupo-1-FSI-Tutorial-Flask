@@ -102,6 +102,46 @@
     font-weight: 600;
 }
 
+/* ===== Prazos ===== */
+
+.prazo-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem;
+
+    margin-top: .55rem;
+
+    color: var(--cor-suave);
+    font-size: .78rem;
+}
+
+.prazo-atrasado {
+    color: var(--status-cancelada);
+    font-weight: 700;
+}
+
+.badge-prazo {
+    display: inline-block;
+
+    padding: .2rem .5rem;
+
+    border-radius: 50rem;
+
+    background: var(--status-cancelada);
+    color: var(--status-cancelada-texto);
+
+    font-size: .7rem;
+    font-weight: 700;
+}
+
+.prioridade-info {
+    margin-top: .35rem;
+
+    color: var(--cor-suave);
+    font-size: .75rem;
+}
+
 /* ===== Avisos (toasts) ===== */
 .avisos { top: 3.5rem; z-index: 1100; }
 .toast {
@@ -210,6 +250,9 @@ a { color: var(--cor-link); }
 .cartao-tarefa .acoes .btn { padding: .2rem .7rem; font-size: .8rem; border-radius: 8px; }
 
 /* ===== Quadro Admin ===== */
+.tarefa-atrasada td:first-child {
+    border-left: 4px solid var(--status-cancelada);
+}
 .stat {
     background: var(--cor-superficie); border-radius: 14px; padding: 1rem 1.25rem;
     box-shadow: 0 6px 20px var(--sombra); border-left: 5px solid var(--st, var(--cor-borda));
