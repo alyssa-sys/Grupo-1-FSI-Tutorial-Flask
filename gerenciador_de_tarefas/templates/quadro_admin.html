@@ -58,6 +58,7 @@
                     <th>Status</th>
                     <th>Criado por</th>
                     <th>Compartilhado com</th>
+                    <th class="text-end">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,12 +66,29 @@
                 <tr data-status="{{ tarefa.status }}">
                     <td class="fw-semibold">{{ tarefa.titulo }}</td>
                     <td class="text-secondary small">{{ (tarefa.descricao or '')|truncate(60) }}</td>
-                    <td><span class="selo {{ classes.get(tarefa.status, 'status-pendente') }}">{{ tarefa.status }}</span></td>                    <td>{{ pessoa(tarefa.criador) }}</td>
+                    <td><span class="selo {{ classes.get(tarefa.status, 'status-pendente') }}">{{ tarefa.status }}</span></td>
+                    <td>{{ pessoa(tarefa.criador) }}</td>
                     <td>{{ pessoa(tarefa.responsavel) }}</td>
+                    <td>
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <form action="{{ url_for('alterar_status', tarefa_id=tarefa.id) }}" method="POST">
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    {% for s in classes %}
+                                        <option value="{{ s }}" {{ 'selected' if s == tarefa.status }}>{{ s }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                            <a href="{{ url_for('editar_tarefa', tarefa_id=tarefa.id) }}" class="btn btn-principal btn-sm">Editar</a>
+                            <form action="{{ url_for('excluir_tarefa', tarefa_id=tarefa.id) }}" method="POST"
+                                  onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="5" class="text-center text-secondary py-4">Nenhuma tarefa cadastrada.</td>
+                    <td colspan="6" class="text-center text-secondary py-4">Nenhuma tarefa cadastrada.</td>
                 </tr>
                 {% endfor %}
             </tbody>

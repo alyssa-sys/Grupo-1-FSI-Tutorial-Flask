@@ -7,19 +7,22 @@
         <div class="cartao">
             <div class="mb-4">
                 <h2 class="fw-bold mb-1">Editar Tarefa</h2>
-                <p class="text-secondary mb-0">Atualize os dados da tarefa</p>
+                <p class="text-secondary mb-0">
+                    {% if pode_editar(tarefa) %}Atualize os dados da tarefa{% else %}Você pode alterar apenas o status desta tarefa{% endif %}
+                </p>
             </div>
 
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label" for="titulo">Título</label>
                     <input type="text" id="titulo" name="titulo" class="form-control"
-                           value="{{ tarefa.titulo }}" required autofocus>
+                           value="{{ tarefa.titulo }}" required
+                           {% if pode_editar(tarefa) %}autofocus{% else %}readonly{% endif %}>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="descricao">Descrição</label>
                     <textarea id="descricao" name="descricao" class="form-control" rows="4"
-                              required>{{ tarefa.descricao }}</textarea>
+                              required {% if not pode_editar(tarefa) %}readonly{% endif %}>{{ tarefa.descricao }}</textarea>
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="status">Status</label>
@@ -31,7 +34,7 @@
                     </select>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ url_for('quadro') }}" class="btn btn-outline-secondary w-50"
+                    <a href="{{ url_for('admin_dashboard') if eh_admin() else url_for('quadro') }}" class="btn btn-outline-secondary w-50"
                        style="border-radius:10px; padding:.7rem 1rem;">Cancelar</a>
                     <button type="submit" class="btn btn-principal w-50">Salvar</button>
                 </div>

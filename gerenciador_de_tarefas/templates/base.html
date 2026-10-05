@@ -21,7 +21,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark px-3">
-            <a class="navbar-brand" href="{{ url_for('quadro') }}">Gerenciador de Tarefas</a>
+            <a class="navbar-brand" href="{{ url_for('admin_dashboard') if current_user.is_authenticated and current_user.cargo == 'admin' else url_for('quadro') }}">Gerenciador de Tarefas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -47,6 +47,9 @@
                         </div>
                     </li>
                     {% if current_user.is_authenticated %}
+                        {% if current_user.cargo == 'admin' %}
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_dashboard') }}">Painel Admin</a></li>
+                        {% endif %}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('quadro') }}">Quadro</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('adicionar_tarefa') }}">Adicionar Tarefa</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
