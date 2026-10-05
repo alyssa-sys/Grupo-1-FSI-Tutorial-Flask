@@ -15,16 +15,42 @@ login_manager.init_app(app)
 login_manager.login_view = 'login' # type: ignore
 
 
-
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Usuario, int(user_id))
+
+
+# Permissões das tarefas admin
+def eh_admin():
+    return getattr(current_user, 'cargo', None) == 'admin'
+
+def pode_editar(tarefa):
+    return eh_admin() or current_user.id == tarefa.criador_id
+
+def pode_excluir(tarefa):
+    return eh_admin() or current_user.id == tarefa.criador_id
+
+def pode_mudar_status(tarefa):
+    return pode_editar(tarefa) or current_user.id == tarefa.responsavel_id
+
+def voltar_para_lista():
+    return redirect(url_for('admin_dashboard') if eh_admin() else url_for('quadro'))
+
+# deixa as funções disponíveis em todos os templates (inclusive dentro de macros)
+app.jinja_env.globals.update(
+    pode_editar=pode_editar,
+    pode_excluir=pode_excluir,
+    pode_mudar_status=pode_mudar_status,
+    eh_admin=eh_admin,
+)
+
 
 @app.route('/')
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('quadro'))
     return redirect(url_for('login'))
+
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
@@ -70,7 +96,7 @@ def login():
 @app.route('/admin')
 @login_required
 def admin_dashboard():
-    if current_user.cargo != 'admin':
+    if not eh_admin():
         flash("Acesso negado!", 'danger')
         return redirect(url_for('quadro'))
 
@@ -100,57 +126,79 @@ def adicionar_tarefa():
         db.session.commit()
 
         flash('Tarefa adicionada com sucesso!', 'success')
-        return redirect(url_for('quadro'))
-    
+        return voltar_para_lista()
+
     usuarios = Usuario.query.filter(Usuario.id != current_user.id).all()
     return render_template('adicionar_tarefa.html', usuarios=usuarios)
 
 #editar tarefa
 STATUS_VALIDOS = ['Pendente', 'Em andamento', 'Concluída', 'Cancelada']
+
 @app.route('/editar_tarefa/<int:tarefa_id>', methods=['GET', 'POST'])
 @login_required
 def editar_tarefa(tarefa_id):
     tarefa = db.get_or_404(Tarefa, tarefa_id)
-    if current_user.id != tarefa.criador_id and current_user.id != tarefa.responsavel_id:
+    if not pode_mudar_status(tarefa):
         flash('Você não tem permissão para editar esta tarefa.', 'danger')
-        return redirect(url_for('quadro'))
+        return voltar_para_lista()
     if request.method == 'POST':
         status = request.form['status']
         if status not in STATUS_VALIDOS:
             flash('Status inválido.', 'danger')
             return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
-        
-        tarefa.titulo = request.form['titulo']
-        tarefa.descricao = request.form['descricao']
+
+        # só criador e admin pode alterar
+        if pode_editar(tarefa):
+            tarefa.titulo = request.form['titulo']
+            tarefa.descricao = request.form['descricao']
         tarefa.status = status
 
         db.session.commit()
         flash('Tarefa atualizada com sucesso!', 'success')
-        return redirect(url_for('quadro'))
+        return voltar_para_lista()
     return render_template('editar_tarefa.html', tarefa=tarefa)
+
+#alterar apenas o status (usado pelo painel admin)
+@app.route('/alterar_status/<int:tarefa_id>', methods=['POST'])
+@login_required
+def alterar_status(tarefa_id):
+    tarefa = db.get_or_404(Tarefa, tarefa_id)
+    if not pode_mudar_status(tarefa):
+        flash('Você não tem permissão para alterar o status desta tarefa.', 'danger')
+        return voltar_para_lista()
+
+    status = request.form.get('status')
+    if status not in STATUS_VALIDOS:
+        flash('Status inválido.', 'danger')
+        return voltar_para_lista()
+
+    tarefa.status = status
+    db.session.commit()
+    flash('Status atualizado!', 'success')
+    return voltar_para_lista()
 
 #excluir tarefa
 @app.route('/excluir_tarefa/<int:tarefa_id>', methods=['POST'])
 @login_required
 def excluir_tarefa(tarefa_id):
     tarefa = db.get_or_404(Tarefa, tarefa_id)
-    if current_user.id != tarefa.criador_id and current_user.id != tarefa.responsavel_id:
-        flash('Você não tem permissão para excluir esta tarefa.', 'danger')
-        return redirect(url_for('quadro'))
-    
+    if not pode_excluir(tarefa):
+        flash('Só o criador da tarefa (ou um admin) pode excluí-la. Use o status "Cancelada" se não quiser fazê-la.', 'danger')
+        return voltar_para_lista()
+
     db.session.delete(tarefa)
     db.session.commit()
 
     flash('Tarefa excluída com sucesso!', 'success')
-    return redirect(url_for('quadro'))
+    return voltar_para_lista()
 
-#rota do quadro (Dashboard)
+#rota do quadro
 @app.route('/quadro')
 @login_required
 def quadro():
     minhas_tarefas = Tarefa.query.filter_by(criador_id=current_user.id).all()
     tarefas_compartilhadas = Tarefa.query.filter(
-        Tarefa.responsavel_id==current_user.id, 
+        Tarefa.responsavel_id==current_user.id,
         Tarefa.criador_id!=current_user.id
         ).all()
     return render_template('quadro.html', minhas_tarefas=minhas_tarefas, tarefas_compartilhadas=tarefas_compartilhadas)
