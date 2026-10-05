@@ -1,10 +1,10 @@
- {% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Quadro - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
 {% macro coluna(titulo, lista, classe, rotulo) %}
 <div class="col-12 col-md-6 col-lg-3">
-    <div class="coluna {{ cor_badge }}">
+    <div class="coluna {{ classe }}">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-semibold mb-0">{{ titulo }}</h6>
             <span class="contador">{{ lista|length }}</span>
