@@ -199,8 +199,6 @@ def editar_tarefa(tarefa_id):
             flash('Status inválido.', 'danger')
             return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
 
-        tarefa.status = status
-
         # só criador e admin alteram título e descrição
         if pode_editar(tarefa):
             prioridade = request.form.get('prioridade', tarefa.prioridade or 'A definir')
@@ -219,6 +217,8 @@ def editar_tarefa(tarefa_id):
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
             tarefa.prioridade = prioridade
             tarefa.prazo = prazo
+
+        tarefa.status = status
 
         db.session.commit()
         flash('Tarefa atualizada com sucesso!', 'success')
