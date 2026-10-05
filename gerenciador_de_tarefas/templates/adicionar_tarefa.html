@@ -34,10 +34,9 @@
                     <div class="col-md-6">
                         <label class="form-label" for="prioridade">Prioridade</label>
                         <select id="prioridade" name="prioridade" class="form-select">
-                            <option value="A definir" selected>A definir</option>
-                            <option value="Baixa">Baixa</option>
-                            <option value="Média">Média</option>
-                            <option value="Alta">Alta</option>
+                            {% for prioridade in PRIORIDADES_VALIDAS %}
+                                <option value="{{ prioridade }}" {{ 'selected' if loop.first else '' }}>{{ prioridade }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-6">

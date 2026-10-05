@@ -15,6 +15,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login' # type: ignore
 
+CLASSES_STATUS = {
+    'Pendente': 'status-pendente',
+    'Em andamento': 'status-andamento',
+    'Concluída': 'status-concluida',
+    'Cancelada': 'status-cancelada'
+}
+STATUS_VALIDOS = list(CLASSES_STATUS)
+STATUS_ENCERRADOS = ['Concluída', 'Cancelada']
+PRIORIDADES_VALIDAS = ['Alta', 'Média', 'Baixa', 'A definir']
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -39,7 +48,7 @@ def validar_prazo(valor, atual=None):
 def tarefa_atrasada(tarefa):
     if tarefa.prazo is None:
         return False
-    if tarefa.status in ['Concluída', 'Cancelada']:
+    if tarefa.status in STATUS_ENCERRADOS:
         return False
     return tarefa.prazo < datetime.now()
 
@@ -72,6 +81,9 @@ app.jinja_env.globals.update(
     pode_mudar_status=pode_mudar_status,
     eh_admin=eh_admin,
     tarefa_atrasada=tarefa_atrasada,
+    CLASSES_STATUS=CLASSES_STATUS,
+    STATUS_VALIDOS=STATUS_VALIDOS,
+    PRIORIDADES_VALIDAS=PRIORIDADES_VALIDAS
 )
 
 
@@ -89,8 +101,20 @@ def registro():
         if not nomeUsuario or len(nomeUsuario) > 50 or '@' in nomeUsuario:
             flash('Nome de usuário inválido. Use até 50 caracteres, exceto "@".', 'danger')
             return redirect(url_for('registro'))
+        
         nome = request.form.get('nome', '').strip() or nomeUsuario
-        senha = generate_password_hash(request.form['senha'])
+
+        if len(nome) > 100 or len(email) > 254:
+            flash('Nome ou e-mail muito longos.', 'danger')
+            return redirect(url_for('registro'))
+        
+        senha_digitada = request.form['senha']
+
+        if len(senha_digitada) < 4:
+            flash('A senha deve ter pelo menos 4 caracteres.', 'danger')
+            return redirect(url_for('registro'))
+        
+        senha = generate_password_hash(senha_digitada  )
 
         usuario = Usuario.query.filter((Usuario.email == email) | (Usuario.nomeUsuario == nomeUsuario)).first()
         if usuario:
@@ -136,9 +160,6 @@ def admin_dashboard():
     return render_template('quadro_admin.html', tarefas = tarefas)
 
 #adicionar tarefa
-STATUS_VALIDOS = ['Pendente', 'Em andamento', 'Concluída', 'Cancelada']
-PRIORIDADES_VALIDAS = ['Alta', 'Média', 'Baixa', 'A definir']
-
 @app.route('/adicionar_tarefa', methods=['GET', 'POST'])
 @login_required
 def adicionar_tarefa():
@@ -148,9 +169,9 @@ def adicionar_tarefa():
         if not titulo or not descricao:
             flash('Título e descrição são obrigatórios.', 'danger')
             return redirect(url_for('adicionar_tarefa'))
-        status = 'Pendente'
-
-        prioridade = request.form.get('prioridade', 'A definir')
+        
+        status = STATUS_VALIDOS[0]  
+        prioridade = request.form.get('prioridade',PRIORIDADES_VALIDAS[0])
 
         if prioridade not in PRIORIDADES_VALIDAS:
             flash('Prioridade inválida.', 'danger')
@@ -201,7 +222,7 @@ def editar_tarefa(tarefa_id):
 
         # só criador e admin alteram título e descrição
         if pode_editar(tarefa):
-            prioridade = request.form.get('prioridade', tarefa.prioridade or 'A definir')
+            prioridade = request.form.get('prioridade', tarefa.prioridade or PRIORIDADES_VALIDAS[0])
             if prioridade not in PRIORIDADES_VALIDAS:
                 flash('Prioridade inválida.', 'danger')
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
@@ -210,15 +231,17 @@ def editar_tarefa(tarefa_id):
             except ValueError as e:
                 flash(str(e), 'danger')
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
-            tarefa.titulo = request.form['titulo'].strip()
-            tarefa.descricao = request.form['descricao'].strip()
-            if not tarefa.titulo or not tarefa.descricao:
+            titulo = request.form['titulo'].strip()
+            descricao = request.form['descricao'].strip()
+            if not titulo or not descricao:
                 flash('Título e descrição são obrigatórios.', 'danger')
                 return redirect(url_for('editar_tarefa', tarefa_id=tarefa_id))
+            
+            tarefa.titulo = titulo
+            tarefa.descricao = descricao
             tarefa.prioridade = prioridade
             tarefa.prazo = prazo
-
-        tarefa.status = status
+            tarefa.status = status
 
         db.session.commit()
         flash('Tarefa atualizada com sucesso!', 'success')

@@ -2,12 +2,20 @@
 {% block title %}Painel do Administrador - Gerenciador de Tarefas{% endblock %}
 {% block content %}
 
-{% set classes = {
-    'Pendente': 'status-pendente',
-    'Em andamento': 'status-andamento',
-    'Concluída': 'status-concluida',
-    'Cancelada': 'status-cancelada'
-} %}
+{# botões de filtro: depois do botão "Todas" #}
+{% for s in STATUS_VALIDOS %}
+    <button type="button" class="filtro" data-filtro="{{ s }}">{{ s }}</button>
+{% endfor %}
+
+{# selo de status na tabela #}
+<span class="selo {{ CLASSES_STATUS.get(tarefa.status, 'status-pendente') }}">{{ tarefa.status }}</span>
+
+{# select de status da coluna Ações, já com rótulo para leitores de tela #}
+<select name="status" class="form-select form-select-sm" aria-label="Status da tarefa" onchange="this.form.submit()">
+    {% for s in STATUS_VALIDOS %}
+        <option value="{{ s }}" {{ 'selected' if s == tarefa.status else '' }}>{{ s }}</option>
+    {% endfor %}
+</select>
 
 {% macro pessoa(usuario) %}
     {% if usuario %}

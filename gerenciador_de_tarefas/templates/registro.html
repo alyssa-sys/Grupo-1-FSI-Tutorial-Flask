@@ -13,22 +13,23 @@
                 <div class="mb-3">
                     <label class="form-label" for="nomeUsuario">Nome de Usuário</label>
                     <input type="text" id="nomeUsuario" name="nomeUsuario" class="form-control"
-                           placeholder="Ex.: alvaro123" maxlength="50" required autofocus>
+                           placeholder="Ex.: alvaro123" maxlength="50" autocomplete="username" required autofocus>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="nome">Nome / Apelido</label>
                     <input type="text" id="nome" name="nome" class="form-control"
-                           placeholder="Como quer ser chamado">
+                           placeholder="Como quer ser chamado" maxlength="100" autocomplete="name">
+
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="email">E-mail</label>
-                    <input type="email" id="email" name="email" class="form-control"
-                           placeholder="seuemail@gmail.com" required>
+                    <<input type="email" id="email" name="email" class="form-control"
+                            placeholder="seuemail@gmail.com" maxlength="254" autocomplete="email" required>
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="senha">Senha</label>
                     <input type="password" id="senha" name="senha" class="form-control"
-                           placeholder="Crie uma senha" required autocomplete="new-password">
+                           placeholder="Crie uma senha" minlength="8" autocomplete="new-password" required>
                 </div>
                 <button type="submit" class="btn btn-principal w-100">Registrar</button>
             </form>

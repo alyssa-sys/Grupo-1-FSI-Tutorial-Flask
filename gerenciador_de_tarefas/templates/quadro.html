@@ -144,33 +144,9 @@
 
 <div class="row g-3">
 
-    {{ coluna(
-        'Pendente',
-        atribuidas_a_mim|selectattr('status', 'equalto', 'Pendente')|list,
-        'status-pendente',
-        'de'
-    ) }}
-
-    {{ coluna(
-        'Em andamento',
-        atribuidas_a_mim|selectattr('status', 'equalto', 'Em andamento')|list,
-        'status-andamento',
-        'de'
-    ) }}
-
-    {{ coluna(
-        'Concluída',
-        atribuidas_a_mim|selectattr('status', 'equalto', 'Concluída')|list,
-        'status-concluida',
-        'de'
-    ) }}
-
-    {{ coluna(
-        'Cancelada',
-        atribuidas_a_mim|selectattr('status', 'equalto', 'Cancelada')|list,
-        'status-cancelada',
-        'de'
-    ) }}
+    {% for s in STATUS_VALIDOS %}
+        {{ coluna(s, atribuidas_a_mim|selectattr('status', 'equalto', s)|list, CLASSES_STATUS[s], 'de') }}
+    {% endfor %}
 
 </div>
 
@@ -183,33 +159,9 @@
 
 <div class="row g-3 mb-5">
 
-    {{ coluna(
-        'Pendente',
-        delegadas|selectattr('status', 'equalto', 'Pendente')|list,
-        'status-pendente',
-        'para'
-    ) }}
-
-    {{ coluna(
-        'Em andamento',
-        delegadas|selectattr('status', 'equalto', 'Em andamento')|list,
-        'status-andamento',
-        'para'
-    ) }}
-
-    {{ coluna(
-        'Concluída',
-        delegadas|selectattr('status', 'equalto', 'Concluída')|list,
-        'status-concluida',
-        'para'
-    ) }}
-
-    {{ coluna(
-        'Cancelada',
-        delegadas|selectattr('status', 'equalto', 'Cancelada')|list,
-        'status-cancelada',
-        'para'
-    ) }}
+    {% for s in STATUS_VALIDOS %}
+        {{ coluna(s, delegadas|selectattr('status', 'equalto', s)|list, CLASSES_STATUS[s], 'para') }}
+    {% endfor %}
 
 </div>
 
