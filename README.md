@@ -21,7 +21,8 @@ Crie um Gerenciador de Atividades usando python/flask e os tutoriais:
 
 Uma apresentação mostrando o funcionamento interno da sua aplicação. Nada de código. Separe sua aplicação em módulos e explique usando diagrama de atividades e diagrama de fluxo de tela. Os diagramas deverão ser desenhados no Figma.
 
-- <https://canva.link/wff9ksxj629wl2b> Link da apresentação
+- [Link da apresentação no Canva](https://canva.link/wff9ksxj629wl2b)
+- [Link Para o Fluxograma no Figma](https://www.figma.com/design/cCXnxaOhCwOzMAFO08j33D/Sem-t%25C3%25ADtulo?node-id=0-1&p=f&t=ebji5RZxW8wHZcGD-0)
 
 Após instalar a extensão Better Jinja no VS Code, crie a pasta `.vscode` na raiz do projeto (se ela ainda não existir) e dentro dela crie o arquivo `settings.json` com o seguinte conteúdo para que o editor reconheça corretamente os arquivos HTML do Flask/Jinja:
 
